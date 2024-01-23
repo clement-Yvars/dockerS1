@@ -1,35 +1,23 @@
-version: '3.8'
-services:
-  symfony:
-    image: cy2101/symfony:latest
-    ports:
-      - "8000:8000"
-    volumes:
-      - .:/app
-    depends_on:
-      - postgres
+version: '3'
 
-  postgres:
-    image: cy2101/postgres:latest
-    environment:
-      POSTGRES_DB: docker
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: test1234
+services:
+
+  db:
+    container_name: db
+    build:
+      context: ./postgres
+    env_file:
+      - .env
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./:/sql
+    ports :
+      - 5432:5432
 
   adminer:
-    image: cy2101/adminer:latest
-    ports:
-      - "8080:8080"
+    build:
+      context: ./adminer
+    container_name: adminer
     depends_on:
-      - postgres
-
-  composer:
-    image: cy2101/composer:latest
-    volumes:
-      - .:/app
-    command: install # Exécute `composer install` lorsque le service démarre
-
-volumes:
-  postgres_data:
+      - db
+    ports :
+      - 8080:8080
