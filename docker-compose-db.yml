@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: phangwilly/postgres:v1.0
+    restart: always
+    env_file:
+      - ./postgres/.env
+    volumes:
+      - postgres_data:/var/lib/postgresql@14/data:rw
+    networks:
+      - app-network
+    ports:
+      - "5432:5432"
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
