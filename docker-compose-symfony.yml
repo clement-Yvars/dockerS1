@@ -7,8 +7,6 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./php/src:/var/www/html
-    networks:
-      - app-network
 
   composer:
     build:
@@ -17,8 +15,6 @@ services:
     tty: true
     volumes:
       - ./composer/src:/var/www/html
-    networks:
-      - app-network
     depends_on:
       - php
 
@@ -31,12 +27,10 @@ services:
       - ./:/var/www/html/project
     ports:
       - "8000:8000"
-    networks:
-      - app-network
     depends_on:
       - php
     command: php -S 0.0.0.0:8000 -t ./project/public
-#    command: composer create-project symfony/skeleton project
+    #command: composer create-project symfony/skeleton project
 
   adminer:
     build:
@@ -45,8 +39,12 @@ services:
     ports:
       - "8080:8080"
     networks:
-      - app-network
+      - toto
 
 networks:
-  app-network:
-    external: true
+  default:
+    name: app-network
+    external : true
+  toto:
+    name : toto
+    external : true
